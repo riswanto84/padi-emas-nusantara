@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}{% if is_edit %}Ubah Pengguna{% else %}Tambah Pengguna{% endif %} — Padi Emas Nusantara{% endblock %}
+{% block content %}
+<section class="content narrow">
+  <div class="page-head page-head-modern">
+    <div>
+      <div class="eyebrow green">MANAJEMEN AKSES</div>
+      <h1>{% if is_edit %}Ubah Pengguna{% else %}Tambah Pengguna{% endif %}</h1>
+      <p>{% if is_edit %}Perbarui profil, password, dan kombinasi role pengguna.{% else %}Buat akun internal dan berikan satu atau beberapa role sesuai tugas.{% endif %}</p>
+    </div>
+    <a class="btn btn-light" href="{% url 'user_list' %}">← Kembali</a>
+  </div>
+
+  <div class="form-card form-card-modern">
+    <div class="form-section-title"><span class="section-icon">♙</span><div><b>Informasi Akun</b><small>Data identitas pengguna sistem</small></div></div>
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-grid">
+        <label>Username<input name="username" value="{{ user_obj.username|default:'' }}" {% if is_edit %}readonly{% endif %} required placeholder="contoh: operator1"></label>
+        <label>Nama Depan<input name="first_name" value="{{ user_obj.first_name|default:'' }}" placeholder="Nama pengguna"></label>
+        <label>Nama Belakang<input name="last_name" value="{{ user_obj.last_name|default:'' }}" placeholder="Nama belakang"></label>
+        <label>Email<input type="email" name="email" value="{{ user_obj.email|default:'' }}" placeholder="nama@padiemas.local"></label>
+        <label class="full">Password<input type="password" name="password" {% if not is_edit %}required{% endif %} minlength="8" placeholder="{% if is_edit %}Kosongkan jika tidak ingin mengubah password{% else %}Minimal 8 karakter{% endif %}"></label>
+      </div>
+
+      <div class="role-selector">
+        <div class="form-section-title role-title"><span class="section-icon">✓</span><div><b>Role & Hak Akses</b><small>Satu pengguna dapat memiliki beberapa role sekaligus.</small></div></div>
+        <div class="role-options">
+          {% for g in groups %}
+          <label class="role-option {% if g.name in selected_roles %}selected{% endif %}">
+            <input type="checkbox" name="roles" value="{{ g.name }}" {% if g.name in selected_roles %}checked{% endif %}>
+            <span class="role-check">✓</span>
+            <span class="role-copy"><b>{{ g.name }}</b><small>{% if g.name == 'Administrator' %}Akses penuh dan manajemen pengguna{% elif g.name == 'Manajer' %}Dashboard, musim tanam, transaksi & laporan{% elif g.name == 'Keuangan' %}Pengeluaran, penjualan & laporan keuangan{% else %}Input dan pemantauan data operasional{% endif %}</small></span>
+          </label>
+          {% endfor %}
+        </div>
+        <div class="role-tip">💡 Contoh: pengguna yang menangani administrasi dan keuangan dapat diberi role <b>Manajer</b> + <b>Keuangan</b>.</div>
+      </div>
+
+      <div class="form-actions form-actions-modern">
+        <a class="btn btn-light" href="{% url 'user_list' %}">Batal</a>
+        <button class="btn btn-primary" type="submit">{% if is_edit %}Simpan Perubahan{% else %}Simpan Pengguna{% endif %}</button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

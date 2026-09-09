@@ -1,0 +1,23 @@
+{% extends 'base.html' %}{% load formatting %}{% block title %}Laporan Keuangan — Padi Emas Nusantara{% endblock %}{% block content %}
+<section class="content">
+  <div class="page-head-modern report-head">
+    <div><div class="eyebrow green">LAPORAN KEUANGAN</div><h1>Ringkasan Keuangan Usaha</h1><p>Pantau biaya, produksi, penjualan, laba, dan stok hasil panen dalam satu laporan.</p></div>
+    <div class="report-actions"><form class="season-filter" method="get"><label>Musim Tanam</label><select name="season" onchange="this.form.submit()"><option value="">Semua Musim</option>{% for s in seasons %}<option value="{{ s.pk }}" {% if season and s.pk == season.pk %}selected{% endif %}>{{ s.name }}</option>{% endfor %}</select></form><a class="btn btn-outline" href="{% url 'report_pdf' %}?type=financial{% if season %}&season={{ season.pk }}{% endif %}" target="_blank">Cetak PDF</a></div>
+  </div>
+  <div class="report-kpis">
+    <div class="report-kpi"><span>Pendapatan Penjualan</span><b>{{ sales_total|rupiah }}</b><small>{{ sale_count }} transaksi</small></div>
+    <div class="report-kpi"><span>Total Biaya</span><b>{{ expense_total|rupiah }}</b><small>{{ expense_count }} transaksi</small></div>
+    <div class="report-kpi success"><span>Laba Bersih Sementara</span><b>{{ profit|rupiah }}</b><small>Penjualan − biaya</small></div>
+    <div class="report-kpi"><span>Hasil Panen</span><b>{{ harvest_total|angka_id }} Kg</b><small>Sisa {{ stock_kg|angka_id }} Kg</small></div>
+  </div>
+  <div class="report-grid">
+    <div class="panel report-panel"><div class="panel-head"><div><h3>Analisis Profitabilitas</h3><p>Indikator utama musim yang dipilih.</p></div></div>
+      <div class="report-stat-list"><div><span>Biaya per Kg panen</span><b>{{ cost_per_kg|rupiah }}</b></div><div><span>Penjualan per Kg terjual</span><b>{{ sales_per_kg|rupiah }}</b></div><div><span>Volume terjual</span><b>{{ sales_qty|angka_id }} Kg</b></div><div><span>Persediaan hasil panen</span><b>{{ stock_kg|angka_id }} Kg</b></div></div>
+    </div>
+    <div class="panel report-panel"><div class="panel-head"><div><h3>Komposisi Keuangan</h3><p>Gambaran sederhana arus usaha.</p></div></div>
+      <div class="finance-summary"><div class="finance-summary-row"><span>Penjualan</span><div class="progress"><i style="width:100%"></i></div><b>{{ sales_total|rupiah }}</b></div><div class="finance-summary-row"><span>Biaya</span><div class="progress"><i style="width:{% if sales_total %}{% widthratio expense_total sales_total 100 %}{% else %}0{% endif %}%"></i></div><b>{{ expense_total|rupiah }}</b></div><div class="finance-summary-row"><span>Laba</span><div class="progress"><i style="width:{% if sales_total %}{% widthratio profit sales_total 100 %}{% else %}0{% endif %}%"></i></div><b>{{ profit|rupiah }}</b></div></div>
+    </div>
+  </div>
+  <div class="panel report-panel category-panel"><div class="panel-head"><div><h3>Rincian Biaya Operasional</h3><p>Pengeluaran dikelompokkan berdasarkan kategori.</p></div></div><div class="category-list">{% for row in category_rows %}<div class="category-row"><span>{{ row.category }}</span><b>{{ row.total|rupiah }}</b></div>{% empty %}<div class="empty">Belum ada pengeluaran.</div>{% endfor %}</div></div>
+  <div class="table-card-modern report-table"><div class="table-toolbar"><div><b>Kesimpulan Laporan</b><small>{% if season %}{{ season.name }}{% else %}Seluruh musim tanam{% endif %}</small></div></div><div class="report-note"><span>🌾</span><p>Produksi tercatat <strong>{{ harvest_total|angka_id }} Kg</strong>, penjualan <strong>{{ sales_qty|angka_id }} Kg</strong>, sehingga estimasi stok hasil panen yang belum terjual adalah <strong>{{ stock_kg|angka_id }} Kg</strong>.</p></div></div>
+</section>{% endblock %}

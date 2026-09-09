@@ -1,0 +1,55 @@
+{% load static %}
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b6539">
+  <link rel="icon" type="image/png" href="{% static 'img/padi-emas-icon.png' %}">
+  <title>Masuk — Padi Emas Nusantara</title>
+  <link rel="stylesheet" href="{% static 'css/app.css' %}?v=20260908-9">
+</head>
+<body class="login-page">
+  <div class="login-wrap">
+    <section class="login-visual">
+      <div class="login-visual-overlay"></div>
+      <div class="login-brand">
+        <img class="login-logo-image" src="{% static 'img/padi-emas-logo.png' %}" alt="Padi Emas Nusantara">
+      </div>
+      <div class="visual-copy">
+        <div class="visual-kicker">SISTEM MANAJEMEN PERTANIAN PADI</div>
+        <h1>Pertanian Maju,<br>Hasil Melimpah,<br>Masa Depan Sejahtera</h1>
+        <div class="visual-divider"></div>
+        <p>Kelola pengeluaran, pantau hasil panen, dan maksimalkan keuntungan usaha pertanian Anda dengan lebih mudah dan terstruktur.</p>
+        <div class="feature-row">
+          <div class="feature-item"><span>🌱</span><b>Catat<br>Pengeluaran</b></div>
+          <div class="feature-item"><span>🌾</span><b>Pantau<br>Hasil Panen</b></div>
+          <div class="feature-item"><span>📊</span><b>Analisis<br>Keuntungan</b></div>
+        </div>
+      </div>
+      <div class="quote">“Sawah hari ini, pangan untuk esok, dan masa depan yang lebih baik.”</div>
+    </section>
+
+    <section class="login-side">
+      <div class="login-card">
+        <div class="login-logo"><img src="{% static 'img/padi-emas-logo.png' %}" alt="Padi Emas Nusantara"><div class="login-logo-subtitle">Sistem Manajemen Pertanian Padi</div></div>
+        <div class="login-heading"><h2>Selamat Datang</h2><p>Silakan masuk untuk melanjutkan ke sistem</p></div>
+        {% if messages %}{% for message in messages %}<div class="alert">{{ message }}</div>{% endfor %}{% endif %}
+        <form method="post" action="{% url 'login' %}" autocomplete="on">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ next }}">
+          <div class="form-group"><label for="id_username">Username</label><div class="input-wrap"><span class="input-icon">👤</span><input id="id_username" name="username" type="text" placeholder="Masukkan username" autocomplete="username" autofocus required></div></div>
+          <div class="form-group"><label for="id_password">Password</label><div class="input-wrap"><span class="input-icon">🔒</span><input id="id_password" name="password" type="password" placeholder="Masukkan password" autocomplete="current-password" required><button class="password-toggle" type="button" aria-label="Tampilkan password" onclick="togglePassword()">👁</button></div></div>
+          <div class="login-options"><label class="remember"><input type="checkbox" name="remember"><span>Ingat saya</span></label><a href="#">Lupa password?</a></div>
+          <button class="login-button" type="submit"><span>↪</span> Masuk</button>
+        </form>
+        <div class="sustain"><span class="sustain-icon">🌱</span><div><b>Bersama Padi Emas Nusantara</b><br>kita wujudkan pertanian yang lebih produktif,<br>efisien, dan berkelanjutan.</div></div>
+        <footer>© 2026 Padi Emas Nusantara. All rights reserved. · <a href="{% url 'landing' %}">Kembali ke Beranda</a></footer>
+      </div>
+    </section>
+  </div>
+  <script>
+    function togglePassword() { const input=document.getElementById('id_password'), button=document.querySelector('.password-toggle'); const show=input.type==='password'; input.type=show?'text':'password'; button.textContent=show?'🙈':'👁'; button.setAttribute('aria-label',show?'Sembunyikan password':'Tampilkan password'); }
+  </script>
+</body>
+</html>

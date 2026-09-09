@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load formatting %}
+{% block title %}Laporan {{ season.name }} — Padi Emas Nusantara{% endblock %}
+{% block content %}
+<section class="content">
+  <div class="page-head-modern report-head">
+    <div><div class="eyebrow green">LAPORAN MUSIM TANAM</div><h1>{{ season.name }}</h1><p>Ringkasan lengkap kinerja operasional dan keuangan musim tanam ini.</p></div>
+    <div class="report-actions"><a class="btn btn-outline" href="{% url 'report_pdf' %}?type=season&season={{ season.pk }}" target="_blank">Cetak PDF</a><a class="btn btn-outline" href="{% url 'season_list' %}">← Kembali ke Musim Tanam</a></div>
+  </div>
+  <div class="season-report-banner">
+    <div><span>Status</span><b>{{ season.get_status_display }}</b></div>
+    <div><span>Periode</span><b>{{ season.start_date|date:'d M Y' }}{% if season.end_date %} – {{ season.end_date|date:'d M Y' }}{% endif %}</b></div>
+    <div><span>Luas</span><b>{{ season.area_ha|angka_id }} Ha</b></div>
+    <div><span>Target Panen</span><b>{{ season.target_harvest_kg|angka_id }} Kg</b></div>
+  </div>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-icon expense">↘</div><span>Total Pengeluaran</span><b>{{ expense_total|rupiah }}</b><small>{{ expense_count }} transaksi biaya</small></div>
+    <div class="kpi"><div class="kpi-icon harvest">🌾</div><span>Total Hasil Panen</span><b>{{ harvest_total|angka_id }} Kg</b><small>{{ harvest_count }} catatan panen</small></div>
+    <div class="kpi"><div class="kpi-icon sales">↗</div><span>Total Penjualan</span><b>{{ sales_total|rupiah }}</b><small>{{ sales_qty|angka_id }} Kg terjual · {{ sale_count }} transaksi</small></div>
+    <div class="kpi profit"><div class="kpi-icon">✓</div><span>Laba Bersih Sementara</span><b>{{ profit|rupiah }}</b><small>Penjualan − Pengeluaran</small></div>
+  </div>
+  <div class="panel-grid">
+    <div class="panel"><div class="panel-head"><div><h3>Produksi Musim</h3><p>Pencapaian terhadap target panen.</p></div><span class="panel-badge">{{ progress|angka_id }}%</span></div>
+      <div class="profit-progress"><span style="width:{{ progress }}%"></span></div>
+      <div class="summary-line"><span>Hasil panen</span><b>{{ harvest_total|angka_id }} Kg</b></div>
+      <div class="summary-line"><span>Target</span><b>{{ season.target_harvest_kg|angka_id }} Kg</b></div>
+      <div class="summary-line"><span>Sisa stok berdasarkan catatan</span><b>{{ stock_kg|angka_id }} Kg</b></div>
+    </div>
+    <div class="panel"><div class="panel-head"><div><h3>Ringkasan Keuangan</h3><p>Hasil akhir musim yang tercatat.</p></div></div>
+      <div class="summary-line"><span>Pengeluaran</span><b>{{ expense_total|rupiah }}</b></div>
+      <div class="summary-line"><span>Penjualan</span><b>{{ sales_total|rupiah }}</b></div>
+      <div class="summary-line"><span>Laba</span><b>{{ profit|rupiah }}</b></div>
+    </div>
+  </div>
+  <div class="report-grid season-report-cards">
+    <a class="panel report-link-card" href="{% url 'financial_report' %}?season={{ season.pk }}"><span>📊</span><h3>Laporan Keuangan</h3><p>Biaya, penjualan, laba, produksi, dan stok.</p><b>Buka laporan →</b></a>
+    <a class="panel report-link-card" href="{% url 'gross_turnover_report' %}?season={{ season.pk }}"><span>💰</span><h3>Peredaran Bruto</h3><p>Total omzet penjualan dan rincian per bulan.</p><b>Buka laporan →</b></a>
+    <a class="panel report-link-card" href="{% url 'balance_sheet_report' %}?season={{ season.pk }}"><span>⚖️</span><h3>Neraca Keuangan</h3><p>Posisi aset, kewajiban, dan ekuitas musim ini.</p><b>Buka laporan →</b></a>
+    <a class="panel report-link-card" href="{% url 'tax_report' %}?season={{ season.pk }}"><span>🧾</span><h3>Laporan Pajak</h3><p>Estimasi pajak berdasarkan konfigurasi usaha.</p><b>Buka laporan →</b></a>
+  </div>
+</section>
+{% endblock %}

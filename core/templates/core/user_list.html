@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Pengguna & Role — Padi Emas Nusantara{% endblock %}
+{% block content %}
+<section class="content">
+  <div class="page-head page-head-modern">
+    <div><div class="eyebrow green">MANAJEMEN AKSES</div><h1>Pengguna & Role</h1><p>Kelola akun internal dan kombinasi hak akses tim Padi Emas Nusantara.</p></div>
+    <a class="btn btn-primary" href="{% url 'user_create' %}">＋ Tambah Pengguna</a>
+  </div>
+
+  <div class="role-strip role-strip-modern">
+    {% for g in groups %}<div class="role-summary"><span class="role-summary-icon">✓</span><span><b>{{ g.name }}</b><small>Role sistem</small></span></div>{% endfor %}
+  </div>
+
+  <div class="table-card table-card-modern">
+    <div class="table-toolbar"><div><b>Daftar Pengguna</b><small>{{ users|length }} akun terdaftar</small></div></div>
+    <div class="table-scroll"><table><thead><tr><th>Pengguna</th><th>Email</th><th>Role</th><th>Status</th><th class="action-col">Aksi</th></tr></thead><tbody>
+      {% for u in users %}
+      <tr>
+        <td><div class="user-cell"><div class="user-avatar">{{ u.username|slice:':1'|upper }}</div><span><b>{{ u.username }}</b><small>{{ u.get_full_name|default:'Nama belum diisi' }}</small></span></div></td>
+        <td>{{ u.email|default:'—' }}</td>
+        <td><div class="badge-list">{% if u.is_superuser %}<span class="badge green">Administrator</span>{% endif %}{% for g in u.groups.all %}{% if not u.is_superuser or g.name != 'Administrator' %}<span class="badge">{{ g.name }}</span>{% endif %}{% empty %}{% if not u.is_superuser %}<span class="badge gray">Tanpa Role</span>{% endif %}{% endfor %}</div></td>
+        <td><span class="status-pill {% if u.is_active %}active{% else %}inactive{% endif %}"><i></i>{{ u.is_active|yesno:'Aktif,Nonaktif' }}</span></td>
+        <td class="action-col"><a class="btn btn-light btn-xs" href="{% url 'user_edit' u.pk %}">Ubah</a></td>
+      </tr>
+      {% empty %}<tr><td colspan="5"><div class="empty">Belum ada pengguna.</div></td></tr>{% endfor %}
+    </tbody></table></div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}{% load formatting %}{% block title %}Pajak — Padi Emas Nusantara{% endblock %}{% block content %}
+<section class="content">
+  <div class="page-head-modern report-head">
+    <div><div class="eyebrow green">PAJAK USAHA</div><h1>Estimasi Pajak</h1><p>Ringkasan pajak berdasarkan transaksi yang tercatat. Tarif dapat dikonfigurasi oleh Administrator.</p></div>
+    <div class="report-actions"><form class="season-filter" method="get"><label>Musim Tanam</label><select name="season" onchange="this.form.submit()"><option value="">Semua Musim</option>{% for s in seasons %}<option value="{{ s.pk }}" {% if season and s.pk == season.pk %}selected{% endif %}>{{ s.name }}</option>{% endfor %}</select></form><a class="btn btn-outline" href="{% url 'report_pdf' %}?type=tax{% if season %}&season={{ season.pk }}{% endif %}" target="_blank">Cetak PDF</a></div>
+  </div>
+  <div class="tax-alert">⚠️ <div><b>Catatan penting</b><span>Ini adalah estimasi internal berdasarkan tarif yang Anda konfigurasi, bukan penetapan pajak resmi. Sesuaikan tarif dan dasar pengenaan dengan status perpajakan usaha Anda.</span></div></div>
+  <div class="tax-layout">
+    <div>
+      <div class="report-kpis tax-kpis"><div class="report-kpi"><span>Omzet Penjualan</span><b>{{ omzet|rupiah }}</b><small>Total transaksi penjualan</small></div><div class="report-kpi"><span>Total Biaya</span><b>{{ biaya|rupiah }}</b><small>Biaya operasional</small></div><div class="report-kpi"><span>Dasar Pengenaan</span><b>{{ basis_amount|rupiah }}</b><small>{{ profile.get_basis_display }}</small></div><div class="report-kpi success"><span>Estimasi Pajak</span><b>{{ estimated_tax|rupiah }}</b><small>Tarif {{ profile.rate }}%</small></div></div>
+      <div class="panel report-panel"><div class="panel-head"><div><h3>Perhitungan</h3><p>Rumus estimasi transparan.</p></div></div><div class="tax-formula"><div><span>Dasar Pengenaan Pajak</span><b>{{ basis_amount|rupiah }}</b></div><div><span>× Tarif</span><b>{{ profile.rate }}%</b></div><div class="formula-total"><span>Estimasi Pajak</span><b>{{ estimated_tax|rupiah }}</b></div></div></div>
+    </div>
+    <div class="panel report-panel tax-config"><div class="panel-head"><div><h3>Konfigurasi Pajak</h3><p>Hanya Administrator yang dapat mengubah.</p></div></div>{% if request.user.is_superuser %}<form method="post">{% csrf_token %}<label>Tarif (%)</label><input type="number" step="0.001" min="0" name="rate" value="{{ profile.rate }}"><label>Dasar Perhitungan</label><select name="basis"><option value="OMZET" {% if profile.basis == 'OMZET' %}selected{% endif %}>Omzet penjualan</option><option value="LABA" {% if profile.basis == 'LABA' %}selected{% endif %}>Laba setelah biaya</option></select><label>Catatan</label><textarea name="note" rows="4">{{ profile.note }}</textarea><button class="btn" type="submit">Simpan Konfigurasi</button></form>{% else %}<div class="locked-box">🔐 <b>Konfigurasi terkunci</b><p>Hubungi Administrator jika tarif atau dasar pengenaan perlu disesuaikan.</p></div>{% endif %}</div>
+  </div>
+</section>{% endblock %}

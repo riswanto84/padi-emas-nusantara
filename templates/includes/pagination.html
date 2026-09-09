@@ -1,0 +1,33 @@
+{% if page_obj and page_obj.paginator.num_pages > 1 %}
+<nav class="pagination-wrap" aria-label="Navigasi halaman">
+  <div class="pagination-summary">
+    <span>Menampilkan</span> <strong>{{ page_obj.start_index }}–{{ page_obj.end_index }}</strong> <span>dari</span> <strong>{{ page_obj.paginator.count }}</strong> <span>data</span>
+  </div>
+
+  <div class="pagination-controls">
+    {% if page_obj.has_previous %}
+      <a class="page-link page-nav" href="{% if season %}?season={{ season.pk }}&amp;page={{ page_obj.previous_page_number }}{% else %}?page={{ page_obj.previous_page_number }}{% endif %}" aria-label="Halaman sebelumnya">‹ <span>Sebelumnya</span></a>
+    {% else %}
+      <span class="page-link page-nav disabled">‹ <span>Sebelumnya</span></span>
+    {% endif %}
+
+    <div class="page-numbers">
+      {% for num in page_numbers %}
+        {% if num == page_obj.paginator.ELLIPSIS %}
+          <span class="page-ellipsis">…</span>
+        {% elif num == page_obj.number %}
+          <span class="page-link active" aria-current="page">{{ num }}</span>
+        {% else %}
+          <a class="page-link" href="{% if season %}?season={{ season.pk }}&amp;page={{ num }}{% else %}?page={{ num }}{% endif %}">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    {% if page_obj.has_next %}
+      <a class="page-link page-nav" href="{% if season %}?season={{ season.pk }}&amp;page={{ page_obj.next_page_number }}{% else %}?page={{ page_obj.next_page_number }}{% endif %}" aria-label="Halaman berikutnya"><span>Berikutnya</span> ›</a>
+    {% else %}
+      <span class="page-link page-nav disabled"><span>Berikutnya</span> ›</span>
+    {% endif %}
+  </div>
+</nav>
+{% endif %}
