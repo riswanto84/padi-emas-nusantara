@@ -1,0 +1,69 @@
+{% load static %}
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#075934">
+<meta name="description" content="{{ landing.meta_description }}">
+{% if landing.favicon %}<link rel="icon" type="image/png" href="{{ landing.favicon.url }}">{% else %}<link rel="icon" type="image/png" href="{% static 'img/padi-emas-icon.png' %}">{% endif %}
+<title>{{ landing.site_name }} — {{ landing.tagline }}</title>
+<link rel="stylesheet" href="{% static 'css/landing.css' %}?v=20260909-2">
+</head>
+<body>
+<header class="site-header" data-header>
+  <div class="container nav-wrap">
+    <a class="site-logo" href="#beranda" aria-label="{{ landing.site_name }}">
+      {% if landing.logo %}<img src="{{ landing.logo.url }}" alt="{{ landing.site_name }}">{% else %}<img src="{% static 'img/padi-emas-logo.png' %}" alt="{{ landing.site_name }}">{% endif %}
+    </a>
+    <button class="mobile-nav-toggle" type="button" aria-label="Buka menu" aria-expanded="false" data-menu-toggle>☰</button>
+    <nav class="site-nav" data-mobile-nav>
+      <a href="#beranda">Beranda</a><a href="#tentang">Tentang Kami</a><a href="#kegiatan">Kegiatan</a><a href="#fasilitas">Fasilitas</a><a href="#keunggulan">Keunggulan</a><a href="#galeri">Galeri</a><a href="#kontak">Kontak</a>
+      <a class="nav-login" href="{% url 'login' %}"><span>↪</span> Masuk Aplikasi <small>Sistem Manajemen Pertanian Padi</small></a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero" id="beranda">
+  <div class="hero-bg" {% if landing.hero_image %}style="background-image:url('{{ landing.hero_image.url }}')"{% endif %}></div><div class="hero-overlay"></div>
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <div class="eyebrow light">{{ landing.hero_eyebrow }}</div>
+      <h1>{{ landing.hero_title|linebreaksbr }}</h1>
+      <p>{{ landing.hero_text|linebreaksbr }}</p>
+      <div class="hero-actions"><a class="btn btn-primary" href="#tentang">Tentang Kami <b>→</b></a><a class="btn btn-glass" href="#kegiatan">Lihat Kegiatan <b>↓</b></a></div>
+    </div>
+    <div class="hero-slogan">{{ landing.hero_slogan|linebreaksbr }}</div>
+  </div>
+  <div class="hero-features container">
+    {% for item in landing_features %}<div><span>{{ item.icon }}</span><b>{{ item.title }}</b><small>{{ item.description }}</small></div>{% endfor %}
+  </div>
+</section>
+
+<section class="section" id="tentang"><div class="container about-grid">
+  <div class="about-copy"><div class="eyebrow">{{ landing.about_eyebrow }}</div><h2>{{ landing.about_title }}</h2><p>{{ landing.about_text_1|linebreaksbr }}</p><p>{{ landing.about_text_2|linebreaksbr }}</p>
+  <div class="stats"><div><b>{{ landing.stat_1_value }}</b><span>{{ landing.stat_1_label }}</span></div><div><b>{{ landing.stat_2_value }}</b><span>{{ landing.stat_2_label }}</span></div><div><b>{{ landing.stat_3_value }}</b><span>{{ landing.stat_3_label }}</span></div></div><a class="text-btn" href="#keunggulan">Selengkapnya tentang Kami →</a></div>
+  <div class="about-visual"><div class="field-art">{% if landing.about_image %}<img src="{{ landing.about_image.url }}" alt="{{ landing.about_title }}">{% else %}<img src="{% static 'img/rice-field.svg' %}" alt="Ilustrasi pertanian padi">{% endif %}</div><div class="quote-card">“{{ landing.about_quote|linebreaksbr }}”</div></div>
+</div></section>
+
+<section class="system-banner"><div class="container system-inner"><div><div class="eyebrow light">{{ landing.system_eyebrow }}</div><h2>{{ landing.system_title }}</h2><p>{{ landing.system_text|linebreaksbr }}</p></div><a class="btn btn-white" href="{% url 'login' %}">Masuk ke Aplikasi <b>→</b></a></div></section>
+
+<section class="section" id="kegiatan"><div class="container"><div class="section-head"><div><div class="eyebrow">{{ landing.activities_eyebrow }}</div><h2>{{ landing.activities_title }}</h2></div></div>
+<div class="feature-grid">{% for item in landing_activities %}<article><span>{{ item.icon }}</span><h3>{{ item.title }}</h3><p>{{ item.description }}</p></article>{% endfor %}</div></div></section>
+
+<section class="section section-soft" id="fasilitas"><div class="container"><div class="eyebrow">{{ landing.facilities_eyebrow }}</div><h2>{{ landing.facilities_title }}</h2><div class="facility-grid">{% for item in landing_facilities %}<article>{% if item.image %}<img class="facility-img facility-photo" src="{{ item.image.url }}" alt="{{ item.title }}">{% else %}<div class="facility-img img-digital"></div>{% endif %}<h3>{{ item.title }}</h3><p>{{ item.description }}</p></article>{% endfor %}</div></div></section>
+
+<section class="section" id="galeri"><div class="container"><div class="section-head"><div><div class="eyebrow">{{ landing.gallery_eyebrow }}</div><h2>{{ landing.gallery_title }}</h2></div><a class="outline-btn" href="#kontak">{{ landing.gallery_button }}</a></div><div class="gallery-grid">{% for item in landing_gallery %}<div class="gallery"{% if item.image %} style="background-image:url('{{ item.image.url }}')"{% endif %} title="{{ item.title }}"></div>{% empty %}<div class="gallery g1"></div><div class="gallery g2"></div><div class="gallery g3"></div><div class="gallery g4"></div><div class="gallery g5"></div>{% endfor %}</div></div></section>
+
+<section class="section section-soft" id="keunggulan"><div class="container"><div class="eyebrow">{{ landing.values_eyebrow }}</div><h2>{{ landing.values_title }}</h2><div class="values-grid">{% for item in landing_values %}<article><span>{{ item.icon }}</span><div><h3>{{ item.title }}</h3><p>{{ item.description }}</p></div></article>{% endfor %}</div></div></section>
+
+<section class="cta"><div class="container cta-inner"><div><div class="eyebrow light">{{ landing.cta_eyebrow }}</div><h2>{{ landing.cta_title }}</h2><p>{{ landing.cta_text|linebreaksbr }}</p></div><div class="cta-actions"><a class="btn btn-white" href="{% url 'login' %}">Masuk ke Aplikasi →</a><a class="btn btn-outline-white" href="#kontak">Hubungi Kami</a></div></div></section>
+</main>
+
+<footer id="kontak"><div class="container footer-grid"><div class="footer-brand">{% if landing.logo %}<img src="{{ landing.logo.url }}" alt="{{ landing.site_name }}">{% else %}<img src="{% static 'img/padi-emas-logo.png' %}" alt="{{ landing.site_name }}">{% endif %}<p>{{ landing.footer_text }}</p></div><div><h4>Navigasi</h4><a href="#tentang">Tentang Kami</a><a href="#kegiatan">Kegiatan</a><a href="#fasilitas">Fasilitas</a><a href="#keunggulan">Keunggulan</a><a href="#galeri">Galeri</a></div><div><h4>Kontak Kami</h4><p>📍 {{ landing.contact_address|linebreaksbr }}</p><p>☎ {{ landing.contact_phone }}</p><p>✉ {{ landing.contact_email }}</p></div><div><h4>Ikuti Kami</h4><div class="social">{% if landing.instagram_url %}<a href="{{ landing.instagram_url }}" target="_blank" rel="noopener">IG</a>{% endif %}{% if landing.youtube_url %}<a href="{{ landing.youtube_url }}" target="_blank" rel="noopener">YT</a>{% endif %}{% if landing.facebook_url %}<a href="{{ landing.facebook_url }}" target="_blank" rel="noopener">FB</a>{% endif %}{% if landing.linkedin_url %}<a href="{{ landing.linkedin_url }}" target="_blank" rel="noopener">in</a>{% endif %}</div><p class="copyright">{{ landing.copyright_text }}</p></div></div></footer>
+<script>
+(function(){const btn=document.querySelector('[data-menu-toggle]'),nav=document.querySelector('[data-mobile-nav]'); if(!btn||!nav)return; btn.addEventListener('click',()=>{const open=nav.classList.toggle('open');btn.setAttribute('aria-expanded',open)}); nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('open')));})();
+(function(){const h=document.querySelector('[data-header]');window.addEventListener('scroll',()=>h.classList.toggle('scrolled',window.scrollY>10));})();
+</script>
+</body></html>

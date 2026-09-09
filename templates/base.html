@@ -13,12 +13,13 @@
 <div class="app-shell">
 <aside class="sidebar">
   <div class="brand">
-    <div class="brand-mark"><img src="{% static 'img/padi-emas-icon.png' %}" alt="Padi Emas Nusantara"></div>
-    <div class="brand-copy"><b>PADI EMAS</b><strong>NUSANTARA</strong><small>TANAM HARI INI • MASA DEPAN LEBIH BAIK</small></div>
+    <a href="{% url 'dashboard' %}" class="brand-logo-link" aria-label="Padi Emas Nusantara — Dashboard">
+      <img class="brand-logo-full" src="{% static 'img/padi-emas-logo.png' %}" alt="Padi Emas Nusantara">
+    </a>
   </div>
   <div class="sidebar-section-label">UTAMA</div>
   <nav>
-    <a href="{% url 'dashboard' %}" class="nav-item {% if request.path == '/' %}active{% endif %}"><span class="nav-ico">⌂</span><span class="nav-text">Dashboard</span></a>
+    <a href="{% url 'dashboard' %}" class="nav-item {% if request.path == '/dashboard/' %}active{% endif %}"><span class="nav-ico">⌂</span><span class="nav-text">Dashboard</span></a>
     <a href="{% url 'season_list' %}" class="nav-item {% if '/musim-tanam' in request.path %}active{% endif %}"><span class="nav-ico">◉</span><span class="nav-text">Musim Tanam</span></a>
     <a href="{% url 'expense_list' %}" class="nav-item {% if '/pengeluaran' in request.path %}active{% endif %}"><span class="nav-ico">Rp</span><span class="nav-text">Pengeluaran</span></a>
     <a href="{% url 'harvest_list' %}" class="nav-item {% if '/panen' in request.path %}active{% endif %}"><span class="nav-ico">⌁</span><span class="nav-text">Hasil Panen</span></a>
