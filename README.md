@@ -154,3 +154,4 @@ For production, replace the wildcard ngrok hosts with your exact domain.
 - Laporan PDF tersedia untuk Laporan Keuangan, Peredaran Bruto, Neraca Keuangan, Pajak, dan Laporan per Musim Tanam.
 - PDF menggunakan kop Padi Emas Nusantara, ringkasan KPI, tabel rincian, footer, dan nomor halaman dengan gaya laporan manajerial yang konsisten dengan Smart Shrimp Farm.
 - Dependensi PDF: `reportlab>=4.2,<5`.
+# padi-emas-nusantara
