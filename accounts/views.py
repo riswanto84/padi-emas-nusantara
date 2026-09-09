@@ -10,13 +10,13 @@ def login_view(request):
     if request.user.is_authenticated:
         return redirect('dashboard')
 
-    next_url = request.POST.get('next') or request.GET.get('next') or '/dashboard/'
+    next_url = request.POST.get('next') or request.GET.get('next') or '/'
     if not url_has_allowed_host_and_scheme(
         next_url,
         allowed_hosts={request.get_host()},
         require_https=request.is_secure(),
     ):
-        next_url = '/dashboard/'
+        next_url = '/'
 
     if request.method == 'POST':
         username = request.POST.get('username', '').strip()

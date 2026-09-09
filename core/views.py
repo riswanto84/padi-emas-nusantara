@@ -14,7 +14,7 @@ from urllib.request import Request, urlopen
 from finance.models import Expense
 from harvest.models import Harvest
 from sales.models import Sale
-from .models import PlantingSeason, LandingPage, LandingFeature, LandingActivity, LandingFacility, LandingGallery, LandingValue
+from .models import PlantingSeason
 
 
 def is_admin(user):
@@ -52,19 +52,6 @@ def weather_forecast(request):
             'error': 'Data cuaca Open-Meteo tidak dapat diambil saat ini.',
             'detail': str(exc),
         }, status=503)
-
-
-def landing_page(request):
-    """Public company-profile landing page, fully editable from Django Admin."""
-    context = {
-        'landing': LandingPage.get_solo(),
-        'landing_features': LandingFeature.objects.filter(is_active=True),
-        'landing_activities': LandingActivity.objects.filter(is_active=True),
-        'landing_facilities': LandingFacility.objects.filter(is_active=True),
-        'landing_gallery': LandingGallery.objects.filter(is_active=True),
-        'landing_values': LandingValue.objects.filter(is_active=True),
-    }
-    return render(request, 'landing.html', context)
 
 
 @login_required
